@@ -38,11 +38,22 @@ h2.sec span{color:var(--orange)}
 
 /* HERO */
 .hero{background:linear-gradient(160deg,#eaf6ff,#d4ecfb);padding:22px 16px 26px;text-align:center}
-.hero .badge-top{display:inline-block;background:var(--red);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px}
+.hero .badge-top{display:inline-block;background:var(--red);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px}
+.badge-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+.badge-row .brand-logo{height:38px;width:auto;object-fit:contain}
+.badge-row .brand-txt{font-size:17px;font-weight:800;color:var(--green)}
+.badge-row .brand-txt b{color:var(--blue)}
 .hero h1{font-size:27px;font-weight:900;color:var(--blue-dark);line-height:1.25;margin-bottom:8px}
 .hero h1 span{color:var(--orange)}
 .hero .tag{color:var(--mint);font-weight:700;font-size:16px;margin-bottom:14px}
-.hero-img{border-radius:16px;overflow:hidden;margin:12px 0;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.1)}
+.hero-img{border-radius:16px;overflow:hidden;margin:12px 0;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.1);position:relative}
+.slider{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.slider::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center}
+.slide img{width:100%;display:block}
+.dots{display:flex;gap:7px;justify-content:center;position:absolute;left:0;right:0;bottom:10px}
+.dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.6);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.25s;cursor:pointer}
+.dots span.on{background:#fff;width:20px;border-radius:4px}
 .price-box{margin:14px 0}
 .price-old{color:var(--muted);text-decoration:line-through;font-size:17px;margin-right:8px}
 .price-new{color:var(--red);font-size:34px;font-weight:900}
@@ -164,17 +175,28 @@ h2.sec span{color:var(--orange)}
 
   <!-- HERO -->
   <section class="hero">
-    <span class="badge-top">🔥 ĐANG BÁN CHẠY #1</span>
+    <div class="badge-row">
+      <img class="brand-logo" src="img/logo.png" alt="GreenCare"
+           onerror="this.outerHTML='&lt;span class=\'brand-txt\'&gt;Green&lt;b&gt;Care&lt;/b&gt;&lt;/span&gt;'">
+      <span class="badge-top">🔥 ĐANG BÁN CHẠY #1</span>
+    </div>
     <h1>Meyem <span>Dentikid</span></h1>
     <div class="tag">Xịt răng miệng chống sâu răng • Cho bé từ 1 tuổi</div>
     <div class="hero-img">
-      <img src="img/anhchinh.jpg" alt="Meyem Dentikid - xịt răng miệng chống sâu răng cho bé"
-           onerror="this.outerHTML='&lt;div class=\'ph-img\'&gt;[ẢNH HERO – lưu vào img/anhchinh.jpg]&lt;/div&gt;'">
+      <div class="slider" id="heroSlider">
+        <div class="slide"><img src="img/anhchinh.jpg" alt="Meyem Dentikid - xịt răng miệng chống sâu răng cho bé"
+             onerror="this.outerHTML='&lt;div class=\'ph-img\'&gt;[ẢNH 1 – img/anhchinh.jpg]&lt;/div&gt;'"></div>
+        <div class="slide"><img src="img/anh2.jpg" alt="Meyem Dentikid - ảnh 2"
+             onerror="this.outerHTML='&lt;div class=\'ph-img\'&gt;[ẢNH 2 – img/anh2.jpg]&lt;/div&gt;'"></div>
+        <div class="slide"><img src="img/anh3.jpg" alt="Meyem Dentikid - ảnh 3"
+             onerror="this.outerHTML='&lt;div class=\'ph-img\'&gt;[ẢNH 3 – img/anh3.jpg]&lt;/div&gt;'"></div>
+      </div>
+      <div class="dots" id="heroDots"></div>
     </div>
     <div class="price-box">
-      <span class="price-old">[GIÁ GỐC]đ</span>
-      <span class="price-new">[GIÁ BÁN]đ</span>
-      <span class="price-off">-[%] OFF</span>
+      <span class="price-old">200.000đ</span>
+      <span class="price-new">139.000đ</span>
+      <span class="price-off">-30% OFF</span>
     </div>
     <a href="#order" class="btn btn-cta">🛒 ĐẶT MUA NGAY</a>
   </section>
@@ -182,8 +204,8 @@ h2.sec span{color:var(--orange)}
   <!-- SOCIAL PROOF -->
   <section class="proof">
     <div class="item"><div class="num">4.9/5</div><div class="stars">★★★★★</div></div>
-    <div class="item"><div class="num">[SỐ] +</div><div class="lbl">Đã bán</div></div>
-    <div class="item"><div class="num">[SỐ] +</div><div class="lbl">Mẹ tin dùng</div></div>
+    <div class="item"><div class="num">1500+</div><div class="lbl">Đã bán</div></div>
+    <div class="item"><div class="num">1000+</div><div class="lbl">Mẹ tin dùng</div></div>
   </section>
 
   <!-- PROBLEM -->
@@ -285,23 +307,16 @@ h2.sec span{color:var(--orange)}
 
     <div class="combo">
       <h3>🎁 Combo 1 — Dùng thử</h3>
-      <div class="cp"><span class="n">[GIÁ]đ</span><span class="o">[GIÁ GỐC]đ</span></div>
-      <ul><li>01 chai xịt chống sâu răng</li><li>Phí ship: [SỐ]đ</li></ul>
+      <div class="cp"><span class="n">139.000đ</span><span class="o">200.000đ</span></div>
+      <ul><li>01 chai xịt chống sâu răng</li><li>Phí ship: 10.000đ</li></ul>
       <a href="#order" class="btn btn-cta" style="padding:12px;font-size:16px">Chọn combo này</a>
     </div>
 
     <div class="combo hot">
       <span class="flag">⭐ BÁN CHẠY NHẤT</span>
       <h3>🎁 Combo 2 — Tiết kiệm</h3>
-      <div class="cp"><span class="n">[GIÁ]đ</span><span class="o">[GIÁ GỐC]đ</span></div>
-      <ul><li>02 chai xịt chống sâu răng</li><li>🚚 MIỄN PHÍ vận chuyển</li><li>Tiết kiệm [SỐ]đ</li></ul>
-      <a href="#order" class="btn btn-cta" style="padding:12px;font-size:16px">Chọn combo này</a>
-    </div>
-
-    <div class="combo">
-      <h3>🎁 Combo 3 — Gia đình</h3>
-      <div class="cp"><span class="n">[GIÁ]đ</span><span class="o">[GIÁ GỐC]đ</span></div>
-      <ul><li>03 chai xịt chống sâu răng</li><li>🚚 MIỄN PHÍ vận chuyển</li><li>🎀 Tặng [QUÀ TẶNG nếu có]</li></ul>
+      <div class="cp"><span class="n">259.000đ</span><span class="o">400.000đ</span></div>
+      <ul><li>02 chai xịt chống sâu răng</li><li>🚚 MIỄN PHÍ vận chuyển</li><li>Tiết kiệm 141.000đ</li></ul>
       <a href="#order" class="btn btn-cta" style="padding:12px;font-size:16px">Chọn combo này</a>
     </div>
 
@@ -324,7 +339,7 @@ h2.sec span{color:var(--orange)}
     <div class="guar">
       <div class="g"><div class="ic">✅</div><div class="t">Hàng chính hãng 100%</div></div>
       <div class="g"><div class="ic">💵</div><div class="t">Kiểm tra, nhận hàng mới trả tiền (COD)</div></div>
-      <div class="g"><div class="ic">🔄</div><div class="t">Đổi trả trong [SỐ] ngày</div></div>
+      <div class="g"><div class="ic">🔄</div><div class="t">Đổi trả trong 3 ngày</div></div>
       <div class="g"><div class="ic">🚚</div><div class="t">Giao hàng toàn quốc 2-5 ngày</div></div>
     </div>
 
@@ -336,7 +351,7 @@ h2.sec span{color:var(--orange)}
     <div class="rv-sum">
       <div class="big">4.9/5</div>
       <div class="stars">★★★★★</div>
-      <div style="color:var(--muted);font-size:13px">Dựa trên [SỐ] đánh giá</div>
+      <div style="color:var(--muted);font-size:13px">Dựa trên 700+ đánh giá</div>
     </div>
 
     <div class="rev">
@@ -365,9 +380,8 @@ h2.sec span{color:var(--orange)}
         <input type="text" name="address" placeholder="Địa chỉ nhận hàng *" required>
         <select name="combo" required>
           <option value="">-- Chọn combo --</option>
-          <option value="combo1">Combo 1 — 01 chai ([GIÁ]đ)</option>
-          <option value="combo2">Combo 2 — 02 chai ([GIÁ]đ) • Freeship</option>
-          <option value="combo3">Combo 3 — 03 chai ([GIÁ]đ) • Freeship</option>
+          <option value="combo1">Combo 1 — 01 chai (139.000đ + 10.000đ ship)</option>
+          <option value="combo2">Combo 2 — 02 chai (259.000đ) • Freeship</option>
         </select>
         <textarea name="note" placeholder="Ghi chú (không bắt buộc)"></textarea>
         <button type="submit" class="btn btn-cta">🛒 CHỐT ĐƠN — THANH TOÁN KHI NHẬN HÀNG</button>
@@ -384,8 +398,7 @@ h2.sec span{color:var(--orange)}
 
   <!-- FOOTER -->
   <footer class="foot">
-    <h4>[TÊN SHOP / CỬA HÀNG]</h4>
-    <p>Địa chỉ: [ĐỊA CHỈ]</p>
+    <h4>MEDI GREEN CARE</h4>
     <p>Hotline: <a href="tel:[SĐT]">[SĐT]</a></p>
     <div class="links">
       <a href="#">Liên hệ</a>
@@ -413,6 +426,25 @@ h2.sec span{color:var(--orange)}
 </div>
 
 <script>
+// Slider ảnh hero: dots theo dõi vị trí lướt
+(function(){
+  var sl=document.getElementById('heroSlider'), dw=document.getElementById('heroDots');
+  if(!sl||!dw) return;
+  var slides=sl.querySelectorAll('.slide');
+  if(slides.length<2){ return; }
+  slides.forEach(function(_,i){
+    var d=document.createElement('span');
+    if(i===0) d.className='on';
+    d.addEventListener('click',function(){ sl.scrollTo({left:sl.clientWidth*i,behavior:'smooth'}); });
+    dw.appendChild(d);
+  });
+  var dots=dw.querySelectorAll('span');
+  sl.addEventListener('scroll',function(){
+    var i=Math.round(sl.scrollLeft/sl.clientWidth);
+    dots.forEach(function(d,k){ d.classList.toggle('on',k===i); });
+  });
+})();
+
 // Đếm ngược: reset về 2 giờ mỗi lần tải, lưu trong phiên
 (function(){
   var KEY='xsr_deadline';
