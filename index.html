@@ -54,6 +54,13 @@ h2.sec span{color:var(--orange)}
 .dots{display:flex;gap:7px;justify-content:center;position:absolute;left:0;right:0;bottom:10px}
 .dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.6);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.25s;cursor:pointer}
 .dots span.on{background:#fff;width:20px;border-radius:4px}
+.slider{cursor:grab}
+.slider.dragging{cursor:grabbing}
+.slider.dragging{scroll-behavior:auto}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border:none;border-radius:50%;background:rgba(255,255,255,.85);color:var(--blue-dark);font-size:24px;line-height:1;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:3}
+.nav.prev{left:8px}
+.nav.next{right:8px}
+.nav:active{background:#fff}
 .price-box{margin:14px 0}
 .price-old{color:var(--muted);text-decoration:line-through;font-size:17px;margin-right:8px}
 .price-new{color:var(--red);font-size:34px;font-weight:900}
@@ -183,14 +190,9 @@ h2.sec span{color:var(--orange)}
     <h1>Meyem <span>Dentikid</span></h1>
     <div class="tag">Xịt răng miệng chống sâu răng • Cho bé từ 1 tuổi</div>
     <div class="hero-img">
-      <div class="slider" id="heroSlider">
-        <div class="slide"><img src="img/anhchinh.jpg" alt="Meyem Dentikid - xịt răng miệng chống sâu răng cho bé"
-             onerror="this.outerHTML='&lt;div class=\'ph-img\'&gt;[ẢNH 1 – img/anhchinh.jpg]&lt;/div&gt;'"></div>
-        <div class="slide"><img src="img/anh2.jpg" alt="Meyem Dentikid - ảnh 2"
-             onerror="this.outerHTML='&lt;div class=\'ph-img\'&gt;[ẢNH 2 – img/anh2.jpg]&lt;/div&gt;'"></div>
-        <div class="slide"><img src="img/anh3.jpg" alt="Meyem Dentikid - ảnh 3"
-             onerror="this.outerHTML='&lt;div class=\'ph-img\'&gt;[ẢNH 3 – img/anh3.jpg]&lt;/div&gt;'"></div>
-      </div>
+      <div class="slider" id="heroSlider"></div>
+      <button class="nav prev" id="heroPrev" type="button" aria-label="Ảnh trước">‹</button>
+      <button class="nav next" id="heroNext" type="button" aria-label="Ảnh sau">›</button>
       <div class="dots" id="heroDots"></div>
     </div>
     <div class="price-box">
@@ -430,6 +432,24 @@ h2.sec span{color:var(--orange)}
 (function(){
   var sl=document.getElementById('heroSlider'), dw=document.getElementById('heroDots');
   if(!sl||!dw) return;
+
+  // === DANH SÁCH ẢNH — muốn thêm/bớt chỉ sửa ở đây ===
+  var IMAGES=[
+    'anhchinh.jpg','anh2.jpg','anh3.jpg','anh4.jpg','anh5.jpg',
+    'anh6.jpg','anh7.jpg','anh8.jpg','anh9.jpg','anh10.jpg',
+    'anh11.jpg','anh12.jpg'
+  ];
+  IMAGES.forEach(function(name,i){
+    var s=document.createElement('div'); s.className='slide';
+    var img=document.createElement('img');
+    img.src='img/'+name;
+    img.alt='Meyem Dentikid - ảnh '+(i+1);
+    img.setAttribute('draggable','false');
+    img.onerror=function(){ var ph=document.createElement('div'); ph.className='ph-img'; ph.textContent='[ẢNH '+(i+1)+' – img/'+name+']'; s.replaceChild(ph,img); };
+    s.appendChild(img);
+    sl.appendChild(s);
+  });
+
   var slides=sl.querySelectorAll('.slide');
   if(slides.length<2){ return; }
   slides.forEach(function(_,i){
@@ -439,10 +459,39 @@ h2.sec span{color:var(--orange)}
     dw.appendChild(d);
   });
   var dots=dw.querySelectorAll('span');
+  function current(){ return Math.round(sl.scrollLeft/sl.clientWidth); }
   sl.addEventListener('scroll',function(){
-    var i=Math.round(sl.scrollLeft/sl.clientWidth);
+    var i=current();
     dots.forEach(function(d,k){ d.classList.toggle('on',k===i); });
   });
+  function go(n){
+    var i=Math.max(0,Math.min(slides.length-1,current()+n));
+    sl.scrollTo({left:sl.clientWidth*i,behavior:'smooth'});
+  }
+  var prev=document.getElementById('heroPrev'), next=document.getElementById('heroNext');
+  if(prev) prev.addEventListener('click',function(){ go(-1); });
+  if(next) next.addEventListener('click',function(){ go(1); });
+
+  // Kéo bằng chuột trên máy tính
+  var down=false, startX=0, startScroll=0, moved=false;
+  sl.addEventListener('mousedown',function(e){
+    down=true; moved=false; startX=e.pageX; startScroll=sl.scrollLeft; sl.classList.add('dragging');
+  });
+  window.addEventListener('mousemove',function(e){
+    if(!down) return;
+    var dx=e.pageX-startX;
+    if(Math.abs(dx)>3) moved=true;
+    sl.scrollLeft=startScroll-dx;
+  });
+  window.addEventListener('mouseup',function(){
+    if(!down) return;
+    down=false; sl.classList.remove('dragging');
+    // snap về slide gần nhất
+    sl.scrollTo({left:sl.clientWidth*current(),behavior:'smooth'});
+  });
+  // chặn kéo ảnh mặc định của trình duyệt
+  sl.querySelectorAll('img').forEach(function(im){ im.setAttribute('draggable','false'); });
+  sl.addEventListener('click',function(e){ if(moved){ e.preventDefault(); } },true);
 })();
 
 // Đếm ngược: reset về 2 giờ mỗi lần tải, lưu trong phiên
